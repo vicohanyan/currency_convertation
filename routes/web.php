@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/currencies', GetCurrency::class);
+Route::get('/convert', ConvertCurrency::class);
