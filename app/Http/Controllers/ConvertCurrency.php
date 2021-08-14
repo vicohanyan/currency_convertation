@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use http\Encoding\Stream\Deflate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -34,11 +33,11 @@ class ConvertCurrency extends Currency
             }
         }
         if ($from_cur == 'RUB' && !empty($to_cur_value) && !empty($to_cur_nominal)) {
-            $amount = round($this->fromRub($user_amount,$to_cur_value, $to_cur_nominal));
+            $amount = round($this->fromRub($user_amount, $to_cur_value, $to_cur_nominal));
             return JsonResponse::create(["amount" => $amount]);
         }
         if ($to_cur == 'RUB' && !empty($from_cur_value) && !empty($from_cur_nominal)) {
-            $amount = round($this->toRub($user_amount,$from_cur_value,$from_cur_nominal));
+            $amount = round($this->toRub($user_amount, $from_cur_value, $from_cur_nominal));
             return JsonResponse::create(["amount" => $amount]);
         }
         if (empty($from_cur_value) || empty($from_cur_nominal)
@@ -46,9 +45,8 @@ class ConvertCurrency extends Currency
         ) {
             return JsonResponse::create(["amount" => "0"], 500);
         }
-
-        $amount_in_rub = $this->toRub($user_amount,$from_cur_value,$from_cur_nominal);
-        $amount = round($this->fromRub($amount_in_rub,$to_cur_value, $to_cur_nominal));
+        $amount_in_rub = $this->toRub($user_amount, $from_cur_value, $from_cur_nominal);
+        $amount = round($this->fromRub($amount_in_rub, $to_cur_value, $to_cur_nominal));
         return JsonResponse::create(["amount" => $amount]);
     }
 
@@ -59,7 +57,8 @@ class ConvertCurrency extends Currency
      * @param int $cur_nominal
      * @return float
      */
-    protected function fromRub(int $amount,float $cur_value,int $cur_nominal):float{
+    protected function fromRub(int $amount, float $cur_value, int $cur_nominal): float
+    {
         return ($amount * $cur_nominal) / $cur_value;
     }
 
@@ -70,7 +69,8 @@ class ConvertCurrency extends Currency
      * @param int $cur_nominal
      * @return float
      */
-    protected function toRub(int $amount,float $cur_value,int $cur_nominal):float{
+    protected function toRub(int $amount, float $cur_value, int $cur_nominal): float
+    {
         return $amount * ($cur_value / $cur_nominal);
     }
 }
