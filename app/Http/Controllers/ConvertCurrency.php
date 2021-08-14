@@ -18,6 +18,9 @@ class ConvertCurrency extends Currency
         $from_cur = $request->get('from');
         $to_cur = $request->get('to');
         $user_amount = $request->get('amount');
+        if(empty($from_cur) || empty($to_cur) || empty($user_amount)){
+            return JsonResponse::create([], 500);
+        }
         $from_cur_value = NULL;
         $from_cur_nominal = NULL;
         $to_cur_value = NULL;
@@ -43,7 +46,7 @@ class ConvertCurrency extends Currency
         if (empty($from_cur_value) || empty($from_cur_nominal)
             || empty($to_cur_value) || empty($to_cur_nominal)
         ) {
-            return JsonResponse::create(["amount" => "0"], 500);
+            return JsonResponse::create([], 500);
         }
         $amount_in_rub = $this->toRub($user_amount, $from_cur_value, $from_cur_nominal);
         $amount = round($this->fromRub($amount_in_rub, $to_cur_value, $to_cur_nominal));
